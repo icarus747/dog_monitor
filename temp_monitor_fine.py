@@ -1,4 +1,4 @@
-# import adafruit_dht
+import adafruit_dht
 import board
 import smtplib
 from email.mime.text import MIMEText
@@ -55,7 +55,6 @@ def read_temp():
         except Exception as error:
             dhtDevice.exit()
             raise error
-        time.sleep(2.0)
 
 
 yaml = YAML(typ='safe')
@@ -63,7 +62,7 @@ secrets = yaml.load(open('secrets.yml'))
 temp = float(read_temp())  # GPIO temp
 
 # Check if the temperature is ok
-if (temp < high):
+if temp < high:
     action = ['bring us a bone', 'find our ball', 'bring us a treat', 'come scratch our back',
               'tell us about the beach', 'take us for a walk', 'bring us a shell']
     kid = ['Kendall', 'Lily']

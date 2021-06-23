@@ -3,6 +3,7 @@ import board
 import smtplib
 from email.mime.text import MIMEText
 from ruamel.yaml import YAML
+import time
 
 # Initial the dht device, with data pin connected to:
 dhtDevice = adafruit_dht.DHT22(board.D23, use_pulseio=False)
@@ -49,7 +50,6 @@ def read_temp():
         except Exception as error:
             dhtDevice.exit()
             raise error
-        time.sleep(2.0)
 
 
 yaml = YAML(typ='safe')
@@ -57,7 +57,7 @@ secrets = yaml.load(open('secrets.yml'))
 temp = float(read_temp())  # GPIO temp
 
 # Check if the temperature is above 83°F
-if (temp > high):
+if temp > high:
     if temp > too_high:
         critical = True
         subject = f"Critical warning! The temperature is: {temp}!!"
