@@ -1,0 +1,5 @@
+# Adafruit_DHT  #https://github.com/adafruit/Adafruit_Python_DHT
+adafruit-circuitpython-dht #https://learn.adafruit.com/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging/python-setup
+# smtplib #standard
+# email.mime.text #standard
+# random #standard
