@@ -4,7 +4,7 @@ import smtplib
 from email.mime.text import MIMEText
 import random
 import time
-from ruamel.yaml import YAML
+import os
 
 # Initial the dht device, with data pin connected to:
 dhtDevice = adafruit_dht.DHT22(board.D23, use_pulseio=False)
