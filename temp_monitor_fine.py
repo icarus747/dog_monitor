@@ -7,26 +7,26 @@ import time
 import os
 
 # Initial the dht device, with data pin connected to:
-dhtDevice = adafruit_dht.DHT22(board.D23, use_pulseio=False)
+dhtDevice = adafruit_dht.DHT22(board.GP28, use_pulseio=False)
 
 critical = False
 high = 83  # temp in °F
 too_high = 88
 
 
-def send_email(subject, body, secrets):
+def send_email(subject, body):
     # Enter your smtp Server-Connection
     server = smtplib.SMTP('smtp.gmail.com', 587)  # if your using gmail: smtp.gmail.com
     server.ehlo()
     server.starttls()
     server.ehlo()
     # Login
-    user = secrets['account']['user']
-    password = secrets['account']['password']
+    user = os.getenv('account_user')
+    password = os.getenv('account_password')
     server.login(user, password)
 
-    recipients = secrets['email']['recipients']
-    sender = secrets['email']['sender']
+    recipients = ['recipient1','recipient2','recipient3']
+    sender = user
     msg = MIMEText(body)
     # print(msg)
     msg['Subject'] = subject
@@ -45,8 +45,7 @@ def send_email(subject, body, secrets):
 def read_temp():
     while True:
         try:
-            temperature = dhtDevice.temperature
-            temp_f = temperature * 9.0 / 5.0 + 32.0
+            temp_f = dhtDevice.temperature * 9.0 / 5.0 + 32.0
             return round(temp_f)
         except RuntimeError as error:
             print(error.args[0])
@@ -57,8 +56,6 @@ def read_temp():
             raise error
 
 
-yaml = YAML(typ='safe')
-secrets = yaml.load(open('secrets.yml'))
 temp = float(read_temp())  # GPIO temp
 
 # Check if the temperature is ok
@@ -68,4 +65,4 @@ if temp < high:
     kid = ['Kendall', 'Lily']
     subject = f"Everything is working fine! Temp={temp}F"
     body = f"We are fine. Have Fun!!!\n\nTell {random.choice(kid)} to {random.choice(action)} when you get back!!!"
-    send_email(subject, body, secrets)
+    send_email(subject, body)
